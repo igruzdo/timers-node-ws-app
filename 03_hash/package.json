@@ -55,5 +55,7 @@
     "url": "https://github.com/emirotin/node-template/issues"
   },
   "homepage": "https://github.com/emirotin/node-template#readme",
-  "dependencies": {}
+  "dependencies": {
+    "node-fetch": "^3.2.3"
+  }
 }

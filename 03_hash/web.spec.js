@@ -5,6 +5,8 @@ const WRONG_FILES = ["cat-wrong.txt", "pipe-wrong.jpg"];
 const LONELY_FILES = ["cat-lonely.jpg"];
 const MISSING_FILES = ["cat-missing.txt"];
 
+//https://raw.githubusercontent.com/emirotin/sb_hash_files/master/pipe.jpg
+
 const PREFIX = "https://raw.githubusercontent.com/emirotin/sb_hash_files/master/";
 
 const run = (fileName) => {
