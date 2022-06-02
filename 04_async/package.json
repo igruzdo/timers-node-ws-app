@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "swapi-search",
   "private": true,
   "version": "1.0.0",
@@ -52,5 +53,8 @@
   "bugs": {
     "url": "https://github.com/emirotin/node-template/issues"
   },
-  "homepage": "https://github.com/emirotin/node-template#readme"
+  "homepage": "https://github.com/emirotin/node-template#readme",
+  "dependencies": {
+    "node-fetch": "^3.2.5"
+  }
 }
