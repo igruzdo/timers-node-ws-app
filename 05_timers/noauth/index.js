@@ -38,7 +38,6 @@ app.get("/api/timers", (req, res) => {
 });
 
 app.post("/api/timers", (req, res) => {
-  console.log(req.body);
   const timer = {
     start: Date.now(),
     description: req.body.description,
@@ -52,7 +51,6 @@ app.post("/api/timers", (req, res) => {
 });
 
 app.post("/api/timers/:id/stop", (req, res) => {
-  console.log(req.params.id);
   TIMERS.forEach((item) => {
     if (item.id === req.params.id) {
       (item["duration"] = item.progress), delete item.progress;
