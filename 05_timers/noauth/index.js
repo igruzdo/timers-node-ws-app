@@ -1,6 +1,6 @@
 const express = require("express");
 const nunjucks = require("nunjucks");
-// const { nanoid } = require("nanoid");
+const { nanoid } = require("nanoid");
 
 const app = express();
 
@@ -24,14 +24,65 @@ app.use(express.static("public"));
 
 app.get("/", (req, res) => {
   res.render("index");
+  countTimer();
 });
 
+app.get("/api/timers", (req, res) => {
+  if (req.query.isActive === "true") {
+    const active = TIMERS.filter((item) => item.isActive);
+    res.send(JSON.stringify(active));
+  } else if (req.query.isActive === "false") {
+    const old = TIMERS.filter((item) => !item.isActive);
+    res.send(JSON.stringify(old));
+  }
+});
+
+app.post("/api/timers", (req, res) => {
+  console.log(req.body);
+  const timer = {
+    start: Date.now(),
+    description: req.body.description,
+    progress: 0,
+    isActive: true,
+    id: nanoid(),
+  };
+  TIMERS.push(timer);
+  countTimer();
+  res.json(timer);
+});
+
+app.post("/api/timers/:id/stop", (req, res) => {
+  console.log(req.params.id);
+  TIMERS.forEach((item) => {
+    if (item.id === req.params.id) {
+      (item["duration"] = item.progress), delete item.progress;
+      (item["end"] = Date.now()), (item.isActive = false);
+    }
+  });
+  res.json({
+    id: req.params.id,
+  });
+});
+
+const intervals = [];
+
+function countTimer() {
+  intervals.forEach((item) => clearInterval(item));
+  TIMERS.filter((item) => item?.isActive).forEach((timer) => {
+    intervals.push(
+      setInterval(() => {
+        timer.progress += 1000;
+      }, 1000)
+    );
+  });
+}
+
 // You can use these initial data
-/*
 const TIMERS = [
   {
     start: Date.now(),
     description: "Timer 1",
+    progress: 0,
     isActive: true,
     id: nanoid(),
   },
@@ -44,7 +95,6 @@ const TIMERS = [
     id: nanoid(),
   },
 ];
-*/
 
 const port = process.env.PORT || 3000;
 
