@@ -40,11 +40,6 @@
       "npm run prettify"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "license": "Apache-2.0",
   "repository": {
     "type": "git",

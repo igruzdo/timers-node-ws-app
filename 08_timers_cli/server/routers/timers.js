@@ -13,26 +13,7 @@ routerTimers.get("/", authBySessionId(), async (req, res) => {
   }
 
   const allTimersByUSerId = await timers.findTimersByUserId(req.user._id);
-
-  if (req.query.isActive === "true") {
-    const active = allTimersByUSerId
-      .filter((timer) => timer.is_active)
-      .map((timer) => ({
-        ...timer,
-        id: timer._id.toString(),
-        progress: Date.now() - timer.start,
-      }));
-    res.send(JSON.stringify(active));
-  } else if (req.query.isActive === "false") {
-    const desactive = allTimersByUSerId
-      .filter((timer) => !timer.is_active)
-      .map((timer) => ({
-        ...timer,
-        id: timer._id.toString(),
-        duration: timer.end - timer.start,
-      }));
-    res.send(JSON.stringify(desactive));
-  }
+  res.send(JSON.stringify(allTimersByUSerId));
 });
 
 routerTimers.post("/", authBySessionId(), async (req, res) => {
@@ -41,7 +22,7 @@ routerTimers.post("/", authBySessionId(), async (req, res) => {
   }
   const timer = {
     userId: req.user._id,
-    description: req.body.description,
+    description: req.header('description'),
   };
 
   const idTimer = await timers.createTimer({ ...timer });
@@ -57,10 +38,17 @@ routerTimers.post("/:id/stop", authBySessionId(), async (req, res) => {
   if (!req.user) {
     return res.sendStatus("401");
   }
-  await timers.stopTimer(req.params.id);
-  res.json({
-    id: req.params.id,
-  });
+  const modifiedCount = await timers.stopTimer(req.params.id);
+
+  if(modifiedCount > 0) {
+    res.json({
+      id: req.params.id,
+    });
+  } else {
+    res.json({
+      error: `Timer  ID = ${req.params.id} not exist`,
+    });
+  }
 });
 
 module.exports = routerTimers;

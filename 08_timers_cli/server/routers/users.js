@@ -22,7 +22,8 @@ routerUsers.post("/signup", async (req, res) => {
 });
 
 routerUsers.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+  const username = req.header('username');
+  const password = req.header('username');
   const user = await users.findUserByUsername(username);
   const passwordHash = setHash(password);
   if (!user || user.password_hash !== passwordHash) {

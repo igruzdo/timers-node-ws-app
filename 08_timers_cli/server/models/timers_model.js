@@ -25,21 +25,24 @@ class Timers {
   };
 
   stopTimer = async (timerId) => {
-    const { modifiedCount } = await this.collection.updateOne(
-      {
-        _id: ObjectId(timerId),
-      },
-      {
-        $set: {
-          is_active: false,
-          end: new Date(),
+    console.log(timerId)
+    try{
+      const { modifiedCount } = await this.collection.updateOne(
+        {
+          _id: ObjectId(timerId),
         },
-      }
-    );
+        {
+          $set: {
+            is_active: false,
+            end: new Date(),
+          },
+        }
+      );
+      return modifiedCount;
+    } catch(err) {
+      return 0;
+    }
 
-    if (modifiedCount === 0) throw new Error("Произошла ошибка создания сессии");
-
-    return modifiedCount;
   };
 
   deleteTimer = async (timerId) => {

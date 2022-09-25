@@ -41,7 +41,7 @@ routerTimers.post("/", authBySessionId(), async (req, res) => {
   }
   const timer = {
     userId: req.user._id,
-    description: req.body.description,
+    description: req.header('username'),
   };
 
   const idTimer = await timers.createTimer({ ...timer });
