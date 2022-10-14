@@ -51,17 +51,15 @@ const server = http.createServer(app)
 const wss = new WebSocket.Server({clientTracking: false, noServer: true })
 
 server.on("upgrade", async (req, socket, head) => {
-  const { searchParams } = new URL(req.url, `http://${req.headers.host}`);
+  const { searchParams } = new URL(req.url, `http://${req.headers.host}`); 
   const token = searchParams && searchParams.get("token");
   const user = await users.findUserBySessionID(token);
-  const userId = user._id
-
-  if(!userId) {
+  if(!user) {
       socket.write("HTTP/1.1 401 Unauthorized\r\n\r\n")
       socket.destroy();
       return;
   }
-
+  const userId = user._id
   req.userId = userId
   wss.handleUpgrade(req, socket, head, (ws) => {
       wss.emit("connection", ws, req)

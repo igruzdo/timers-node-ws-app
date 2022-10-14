@@ -6,7 +6,7 @@ class Users {
   constructor(clientPromise) {
     (async () => {
       this.clientPromise = await clientPromise;
-      this.collection = this.clientPromise.db("users").collection("users");
+      this.collection =  this.clientPromise.db("users").collection("users");
     })();
   }
 
